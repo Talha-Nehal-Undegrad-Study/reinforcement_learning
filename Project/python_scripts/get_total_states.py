@@ -4,8 +4,8 @@ import itertools
 
 def prune_and_get_total_states(grid_size):
     # Our state will be represented as a (grid_size ** 2 x 1) column vector where each element can take either 0, 1, or -1 where 0 represents no move
-    # has been made yet on the state/block. 1 represents that the agent who's aiming to minimize (denoted by M_m) the other agent's
-    #  reward has made a move on that state while -1 represents the same for the maximizer agent (denoted by M_a)
+    # has been made yet on the state/block. 1 represents that the agent who's aiming to maximize (denoted by M_m) the other agent's
+    #  reward has made a move on that state while -1 represents the same for the minimizer agent (denoted by M_a)
     
 
     # Set seed for reproducibility
@@ -29,7 +29,7 @@ def prune_and_get_total_states(grid_size):
         one_occurences = np.sum(combination == 1)
         minus_one_occurences = np.sum(combination == -1)
 
-        if one_occurences - minus_one_occurences == 1 or one_occurences == minus_one_occurences:
+        if minus_one_occurences - one_occurences == 1 or one_occurences == minus_one_occurences:
             pruned_states.append(list(combination))
 
     # Return the list where at each list we have a possible state
