@@ -24,20 +24,18 @@ def prune_and_get_total_states(grid_size):
     # Create a dummy list to hold all valid combinations once we come across them
     pruned_states = []
     for row in range(all_combinations.shape[0]):
-        combination = all_combinations[row, :].reshape(grid_size ** 2, 1)
+        combination = all_combinations[row, :]
         
         one_occurences = np.sum(combination == 1)
         minus_one_occurences = np.sum(combination == -1)
 
-        if one_occurences - minus_one_occurences == 1:
-            pruned_states.append(list(combination))
-        elif one_occurences == minus_one_occurences:
+        if one_occurences - minus_one_occurences == 1 or one_occurences == minus_one_occurences:
             pruned_states.append(list(combination))
 
     # Return the list where at each list we have a possible state
+    # pruned_states = [element[0] for lst in pruned_states for element in lst]
 
     return pruned_states
-
 
                                     
     
