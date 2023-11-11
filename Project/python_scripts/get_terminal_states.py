@@ -37,11 +37,12 @@ def get_terminal_states(map_size, total_states):
                 terminal_states.append(('Draw', state))
             else:
                 terminal_states.append(('Ongoing', state))
-        elif count_lose > 1 or count_win > 1 or (count_lose == 1 and count_win == 1):
+        # Note: count_win or count_lose indiually can be greater > 1 but not together i.e. if both count_win and count_lose are non-zero then that's invalid state
+        elif count_lose != 0 and count_win != 0:
             terminal_states.append(('Invalid', state))
-        elif count_win == 1:
+        elif count_win >= 1:
             terminal_states.append(('Win', state))
-        elif count_lose == 1:
+        elif count_lose >= 1:
             terminal_states.append(('Lose', state))
 
     return terminal_states
