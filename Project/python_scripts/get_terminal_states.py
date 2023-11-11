@@ -2,38 +2,50 @@ import numpy as np
 
 def get_terminal_states(map_size, total_states):
     terminal_states = []
-    
+
     for state in total_states:
-        # convert state into an array of shape (map_size, map_size)
-        matrix = np.array([state[i:i + map_size] for i in range(0, len(state), map_size)])
+        # Convert state into an array of shape (map_size, map_size)
+        matrix = np.array([state[i: i + map_size] for i in range(0, len(state), map_size)])
 
         draw = True
-        lose = False
-        win = False
+        count_lose = 0
+        count_win = 0
+
         for i in range(matrix.shape[0]):
-            if (np.all(np.unique(matrix[i, :]) == 1) and matrix[i, 0] == 1) or \
-               (np.all(np.unique(matrix[:, i]) == 1) and matrix[0, i] == 1) or \
-               (len(set(np.diag(matrix))) == 1 and matrix[i, i] == 1) or \
-               (len(set(np.diag(np.fliplr(matrix)))) == 1 and matrix[i, -1 - i] == 1):
-                terminal_states.append(('Lose', state))
+            # Check for winning and losing conditions
+            mask_lose = np.all(np.unique(matrix[i, :]) == 1) or \
+                        np.all(np.unique(matrix[:, i]) == 1) or \
+                        (i == 0 and np.all(np.diag(matrix) == 1)) or \
+                        (i == 0 and np.all(np.diag(np.fliplr(matrix)) == 1))
+
+            mask_win = np.all(np.unique(matrix[i, :]) == -1) or \
+                       np.all(np.unique(matrix[:, i]) == -1) or \
+                       (i == 0 and np.all(np.diag(matrix) == -1)) or \
+                       (i == 0 and np.all(np.diag(np.fliplr(matrix)) == -1))
+
+            if mask_win:
+                count_win += 1
                 draw = False
-                lose = True
-            if (np.all(np.unique(matrix[i, :]) == -1) and matrix[i, 0] == -1) or \
-                 (np.all(np.unique(matrix[:, i]) == -1) and matrix[0, i] == -1) or \
-                 (len(set(np.diag(matrix))) == 1 and matrix[i, i] == -1) or \
-                 (len(set(np.diag(np.fliplr(matrix)))) == 1 and matrix[i, -1 - i] == -1):
-                terminal_states.append(('Win', state))
+
+            if mask_lose:
+                count_lose += 1
                 draw = False
-                win = True
-            if win and lose:
-                terminal_states.append(('Invalid', state))
-            elif i == matrix.shape[0] - 1 and draw:
-                if np.sum(matrix == 0) == 0:
-                    terminal_states.append(('Draw', state))
-                else:
-                    terminal_states.append(('Ongoing', state))
+
+        # Check the terminal state classification
+        if draw:
+            if np.sum(matrix == 0) == 0:
+                terminal_states.append(('Draw', state))
+            else:
+                terminal_states.append(('Ongoing', state))
+        elif count_lose > 1 or count_win > 1 or (count_lose == 1 and count_win == 1):
+            terminal_states.append(('Invalid', state))
+        elif count_win == 1:
+            terminal_states.append(('Win', state))
+        elif count_lose == 1:
+            terminal_states.append(('Lose', state))
 
     return terminal_states
+
 
 def final_prune(labeled_states, total_states):
     terminal_states = [element for element in labeled_states if element[0] != 'Ongoing']
