@@ -35,3 +35,9 @@ def value_iteration(map_size, gamma, state_space, value_table, q_table):
 
     # Return the final updated value and q_table.
     return temp_value_table, temp_q_table
+
+## Next Function is related to the Q_Learning Task
+
+def q_learning(map_size, epsilon, gamma, lr, state_space, value_table, q_table):
+    
+    pass
