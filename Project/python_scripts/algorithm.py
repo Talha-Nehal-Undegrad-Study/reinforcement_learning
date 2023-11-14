@@ -36,8 +36,61 @@ def value_iteration(map_size, gamma, state_space, value_table, q_table):
     # Return the final updated value and q_table.
     return temp_value_table, temp_q_table
 
-## Next Function is related to the Q_Learning Task
+## Next Function is related to the Q_Learning Task --> currently working on it
 
-def q_learning(map_size, epsilon, gamma, lr, state_space, value_table, q_table):
+def update_Q(prev_state, action, player, reward, current_state, lr, adap_lr, gamma, q_table, update_count_table):
+    alpha = lr / (1 + update_count_table[utils.get_ternanry_conversion(prev_state), action] * adap_lr)
+    update_count_table[utils.get_ternanry_conversion(prev_state), action] += 1
+
+    if player == 1:
+        q_table[prev_state, action] += \
+        alpha * (reward + gamma * np.max(q_table[utils.get_ternanry_conversion(current_state)]) - q_table[utils.get_ternanry_conversion(prev_state), action])
+    else:
+        q_table[prev_state, action] += \
+        alpha * (reward + gamma * np.min(q_table[utils.get_ternanry_conversion(current_state)]) - q_table[utils.get_ternanry_conversion(prev_state), action])
+
+    return q_table, update_count_table
+
+def q_learning(map_size, epsilon, gamma, lr, adap_lr, total_reward, state_space, q_table, update_count_table, count_table):
+
+    temp_q_table = q_table.copy()
+    temp_update_count = update_count_table.copy()
+    temp_count_table = count_table.copy()
+    # Initialize starting state and total reward - later used in TD
+    current_state = state_space[0]
     
-    pass
+    delta = 0
+
+    for _ in (range(10)):
+        
+        # Increment visit count for current state
+        prev_state = current_state
+        temp_count_table[utils.get_ternanry_conversion(prev_state)] += 1
+        
+        action = utils.epsilon_action(state = current_state, epsilon = epsilon, q_table = temp_q_table)
+        
+        player = utils.get_player(state = current_state)
+        
+        # Update State
+        current_state = utils.get_next_state(current_state, action, player)
+        
+        # Get terminating status
+        terminate = state_formulation.ongoing_state(map_size, current_state)
+
+        # Get Reward/Payoff of updated state
+        reward = state_formulation.get_reward(map_size, current_state)
+        total_reward += reward
+
+        # Update q_value for previous state - TD
+        old_qsa = temp_q_table[utils.get_ternanry_conversion(prev_state), action]
+
+        temp_q_table, temp_update_count = \
+        update_Q(prev_state, action, player, reward, current_state, lr, adap_lr, gamma, q_table, temp_update_count)
+        
+        delta = np.max([delta, np.abs(old_qsa - temp_q_table[utils.get_ternanry_conversion(prev_state), action])])
+        
+        if terminate:
+            break
+    
+    # return delta, updated q_table, count_table, update_table, total_reward, 
+    return delta, temp_q_table, temp_count_table, temp_update_count, total_reward
