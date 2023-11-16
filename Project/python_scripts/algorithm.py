@@ -58,13 +58,14 @@ def q_learning(map_size, epsilon, gamma, lr, adap_lr, total_reward, state_space,
     temp_update_count = update_count_table.copy()
     temp_count_table = count_table.copy()
     # Initialize starting state and total reward - later used in TD
-    current_state = []
-    terminal = True
-    while terminal:
-        current_state = np.random.choice(state_space)
-        not_terminal = state_formulation.ongoing_state(map_size, current_state)
-        if not_terminal:
-            terminal = False
+    current_state = state_space[0]
+    # For random initialization
+    # terminal = True
+    # while terminal:
+    #     current_state = np.random.choice(state_space)
+    #     not_terminal = state_formulation.ongoing_state(map_size, current_state)
+    #     if not_terminal:
+    #         terminal = False
     # print(f'current_state: {current_state}')
     
     delta = 0
