@@ -1,6 +1,5 @@
 import numpy as np
 import random
-from python_scripts import utils
 # Python script which contains helper functions for value iteration
 
 # A function which gives which player has to play given a state. If the number of 1's and 2's are equal
@@ -32,13 +31,19 @@ def get_ternanry_conversion(state):
 
 # Functions related to the Q-Learning Task:
 
-def epsilon_action(state, epsilon, q_table):
+def epsilon_action(state, epsilon, q_table, player, episode):
     # Get all possible actions
     actions_possible = get_actions(state)
+    # Exponential decay of epsilon
+    if epsilon >= 0.01:
+        epsilon = epsilon / episode
     # Choose optimal q-value for current state epsilon % of the time else random
     if np.random.random() < epsilon:
-        return np.argmax(q_table[utils.get_ternanry_conversion(state), :])
+        if player == 1:
+            return np.argmax(q_table[get_ternanry_conversion(state), :]), epsilon
+        else:
+            return np.argmin(q_table[get_ternanry_conversion(state), :]), epsilon
     else:
-        return random.choice(actions_possible)
+        return random.choice(actions_possible), epsilon
     
 
