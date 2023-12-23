@@ -90,7 +90,7 @@ def q_learning(map_size, epsilon, gamma, lr, adap_lr, total_reward, state_space,
         # Get Reward/Payoff of updated state
         reward = state_formulation.get_reward(map_size, current_state)
         total_reward += reward
-
+        
         # Update q_value for previous state - TD
         old_qsa = temp_q_table[utils.get_ternanry_conversion(prev_state), action]
 
