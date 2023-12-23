@@ -1,0 +1,327 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+
+\title{Sentiment Hello from Audio: An Exploration of Different Machine Learning Algorithms}
+\author{\IEEEauthorblockN{Alyzeh Kazmi, Hafsa Rasool, Ubaid Ur Rehman}
+\IEEEauthorblockA{Department of Electrical Engineering\\
+Lahore University of Management Sciences}}
+\maketitle
+
+\begin{abstract}
+The rapid growth in the field of artificial intelligence has allowed us to identify, among other things, people’s opinions, emotions, thoughts, and impressions from audio files. In this report, we will explore the workings of the process of sentiment analysis that enables us to carry out these interpretations from audio. Sentiment analysis is a significant field in Natural Language Processing; it allows data (audio files) to be converted into valuable information essential to stakeholders such as businessmen, filmmakers, and social media monitors. Sentiment analysis can be done using several machine learning algorithms - Naive Bayes, K Nearest Algorithm, and more. These algorithms use audio features that can be used for synthetic speech attribution. In the scope of this report, we aim to analyze different feature extraction techniques and their impact on the accuracy of various machine learning algorithms. Lastly, we will evaluate the working of a few machine learning algorithms in sentiment analysis.
+
+\textbf{Keywords} — Sentiment Analysis, Machine Learning Algorithm, Audio Feature Extraction, Principal Component Analysis
+\end{abstract}
+
+\section{Methodology}
+We evaluated different classifiers and feature extraction techniques using the CREMA-D dataset, consisting of 7442 audio clips from 91 actors of diverse ages, races, and ethnicities. Our goal was to obtain relevant, discriminative, robust and interpretable features for our classifiers. To achieve this, we employed several techniques such as noise removal and normalization. "Specifically, we used a low-pass filter to remove an overlying screech noise that was overpowering the spoken sentence. Following noise filtration, we normalized our data to improve the classifiers’ performance and training stability" [1]. Our feature extraction techniques included MFCCs, Spectral Centroid, Spectral Bandwidth, Audio Pitch, Audio Energy and Audio Loudness features of audio files.
+
+\section{Features Extracted}
+
+"To analyze speech signals, we employed various feature extraction techniques, we computed a sequence of features for a given duration assuming that the given extracted segment is sufficient to capture the information in the future hence allowing for meaningful modelling" [2]. 
+We employed noise removal and normalization techniques to clean the audio files. Low-pass filtering was applied to remove an overlying screech noise that was overpowering the spoken sentence. 
+Additionally, we normalized the data to improve the classifiers’ performance and training stability using sci-kit learn’s “Preprocessing” Module.
+To ensure the features were relevant, discriminative, robust, and interpretable, we utilized Mel Frequency Cepstral Coefficients (MFCCs), Spectral Centroid (SC), Spectral Bandwidth (SB), Audio Pitch, Audio Energy and Audio Loudness.
+
+Below is a waveform showing the audio before noise removal technique:
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{Untitled4.png}
+%     \caption{Waveform of an audio pre-noise removal}
+%     \label{fig:Audio}
+% \end{figure}
+% Below is a waveform showing the audio after noise removal technique:
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{waveform.png}
+%     \caption{Waveform of an audio post-noise removal}
+%     \label{fig:Audio}
+% \end{figure}
+
+\subsection{MFCCs}
+"MFCCs capture spectral features of audio signals and transform them into features that can be used for analysis. It is the most dominant method to extract spectral feature for speech analysis" [2]. "They can capture the emotional content of speech, as changes in MFCC can indicate a speaker’s change in emotional state" [3]. The MFCCs are generated for each frame of the audio signal, and this results in a sequence of feature vectors with different lengths. To be able to use this sequence in machine learning models, we had to took the mean of all the feature MFCC vectors and concatenated them to our larger features matrix.
+"By using Mel filter banks MFCC mimic nonlinear human air perception of the sound, this is allowed by being more discriminative at lower frequencies and less at higher frequencies" [2]. In addition to Mel filters, MFCC uses cosine transformation that produces decorrelated features [2].
+Furthermore, "MFCC provides a good representation of the spectral properties of the signal which is the key for representing and recognizing characteristics of character" [4].
+However, "MFCCs are not robust in the presence of additive noise, a noise signal changes all MFCCs if at least one frequency band is skewed" [5]. Therefore, "we combined other audio features to capture information more accurately. In addition to using more features we normalization techniques – took mean - to enhance MFCCs robustness" [6].
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{MFCC.png}
+%     \caption{Feature extraction using MFCC}
+%     \label{fig:MFCC}
+% \end{figure}
+
+\subsection{Spectral Centroid}
+"Spectral Centroid measures the center of mass of the power spectrum of the signal and can distinguish between different emotions in speech signals" [7]. "It is relatively robust to noise and variability in speech signals [10]. A higher value of spectrum centroid indicates the accumulation of higher frequency" [8].  However, it is influenced by the pitch of a speech signal, which can affect its reliability. Similar to MFCCs, we took the mean of the Spectral Centroid vector and concatenated it to the feature matrix as a column.
+
+\subsection{Spectral Bandwidth}
+
+\subsection{Audio Pitch}
+
+Since the task at hand was sentiment analysis of audios, the pitch of the voice being spoken varies greatly according to the tone of the speaker. Hence, we included the pitch of the audio files, extracted using 'librosa.core.piptrack'.
+
+\subsection{Audio Energy}
+For our sentiment analysis, audio energy is an important characteristic of the audio signlas which has provided useful information about their emotional content. It is a measure of the intensity or loudness of the audio, and can be indicative of the speaker's overall mood in the audio. 
+"By analyzing the energy distribution in an audio signal, patterns and trends have been identified to help predict the emotional content of the audios" [15].
+
+\subsection{Audio Loudness}
+Audio loudness is another important feature for sentiment analysis in our audios, as it provided insights into the emotional intensity and content of the audio signals. Loudness is a subjective attribute of sound that is closely related to the physical amplitude of the sound wave, and can be used to gauge the emotional content of spoken content. "By analyzing the loudness features of an audio signal, it helped to identify patterns and trends that could predict the sentiment or emotional content of the audios" [16].
+
+
+\subsection{Comparison of Feature Extraction Techniques}
+We employed multiple techniques of feature extraction: used a combination of feature extraction methods which included MFCCs, Audio Energy, Audio Pitch, Audio Loudness, Spectral Centroid, Spectral Bandwidth. Moreover, we also used MFCC only and MFCC augment with Mel spectrogram, Cepstrum and Chromogram. By using the last method, we wanted to augment MFCC with further high-resolution features however the accuracy of algorithm ran on data obtained through MFCC only and augmented version of MFCC didn’t yield differing results. As supported by theory, MFCCs’ proved to be the best performers in features extraction mechanism. The performance of MFCC is based on the accuracy of algorithm produced by running data obtained through 3 methods mentioned above.
+Research states that "MFCC is suitable for a clean speech and performs better for an isolated speech environment, while it is low robust to noise and not suitable for a continuous speech environment since the MFCC frame may contain information of more than one phoneme" [6]. Moreover, MFCC requires more storage space. "For this reason most of the time, MFCC is used in combination with other features extraction techniques to reduce the dimensionality of extracted features and to obtain good accuracy, vector quantization" [6]. However, despite that our research and results both indicate that MFCCs, compared to rest, are the finest feature extraction method for sentiment analysis.
+
+To reduce the feature space’s dimensionality, we used a feature engineering technique called Principal Component Analysis (PCA) due to the large number of features. By combining these audio features, we captured maximum information from the audio, leading to as accurate predictions as possible.
+
+\section{Feature Engineering: Principal Component Analysis}
+Principal Component Analysis (PCA) is a technique used for feature reduction by transforming high-dimensional data into a lower-dimensional subspace. Our study had 34 features. We were worried that they might not all be important, so we used a Random Forest Regressor to determine the importance of each feature. The importance graph (below) indicated that most features contributed little to the outcome variable (emotion). Additionally, our features might be highly correlated, as audio features capture similar information.
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{Untitled1.png}
+%     \caption{Feature Importances Using Random Forest Regressor}
+%     \label{fig:Importances}
+% \end{figure}
+We applied PCA to our data, which would eliminate unnecessary noise and reduce computational complexity. Research states that "in case of corruption of speech signals by noise PCA should be adopted hence by using PCA we aimed to reduce error rate" [6]. PCA performs an eigenvector decomposition of the data, sorting the eigenvectors in decreasing order based on their respective eigenvalues. Mathematically, this can be represented as follows:
+
+Given a data matrix $X$, where $X \in \mathbb{R}^{n \times m}$, PCA aims to find a set of orthonormal vectors, $\{v_1, v_2, ..., v_m\}$, such that they represent the maximum variance in the data. These vectors are called principal components. In PCA, we sort them in descending order of their corresponding eigenvalues. Each principal component represents a linear combination of the original features, where the coefficients correspond to the loadings of each feature. By projecting the data onto these principal components, we obtain a new set of features that capture the maximum amount of information in the data in the new, lower-dimensional space.
+
+Thus, we projected the 34-dimensional data onto a 20 dimensional subspace and compared the results with the original data. As expected, the dimensionality reduction did not significantly affect most algorithms’ accuracy. The comparison graph below demonstrates¬¬ the performance (as measured by their respective accuracies) of the algorithms before and after PCA.
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{Untitled 2.png}
+%     \caption{Accuracies of The Algorithms Before and After PCA}
+%     \label{fig:Accuracy}
+% \end{figure}
+\\
+To complete the picture, here’s a graph below of the performance comparisons, but with F1 scores.
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{f1.png}
+%     \caption{F1-scores of The Algorithms Before and After PCA}
+%     \label{fig:F1}
+% \end{figure}
+
+\section{Mathematical Formulation}
+We had 7442 audio files, with their labels, as
+\begin{align*}
+Data: D = { (X_1, Y_1), (X_2, Y_2), ......., (X_{7442}, Y_{7442})}
+\end{align*}
+Where each $x_i$ is a feature vector consisting of 34 entries
+\begin{align}
+\begin{gathered}
+X_i = \{x_1,x_2, ....., x_{34}\} \\
+X_i\in \mathbb{R}^{34} \\
+Y = \{Neutral, Happy, Sad, Anger, Fear, Disapproval\}
+\end{gathered}
+\end{align}
+where the set $Y$ represents the labels for the audio files. We mapped these labels onto numbers, did a train-test split using sci-kit learn, and trained various Machine Learning algorithms and evaluated their performances.
+
+\section{Machine Learning Algorithms}
+
+\subsection{K-Nearest Neighbors}
+Given a training set of $n$ data points $D$, and a test point $x$, K-Nearest Neighbors calculates the distance (usually Euclidean or Manhattan) of the test point from all the training points and uses its 'k' nearest points' mode to assign a label to the test point $x$. Mathematically, this can be formulated as:
+
+\begin{equation}
+    \hat{y} = \operatorname{mode}\{y_{i_1}, y_{i_2}, \ldots, y_{i_k}\}, \qquad y_{i_j} \in \arg\min_{i=1}^n d(x, x_i),
+\end{equation}
+Distances can be calculated using various methods. Two famous ones are Euclidean and Manhattan distances.
+Euclidean distance:
+\begin{equation}
+d(x, x_i) = \sqrt{\sum_{j=1}^{d}(x_j - x_{ij})^2}
+\end{equation}
+
+Manhattan distance:
+\begin{equation}
+d(x, x_i) = \sum_{j=1}^{d}|x_j - x_{ij}|
+\end{equation}
+
+Moreover, "KNN attempts to segregate the dataset into K pre-defined non-overlapping category in which every data factor belongs to most effective one organization" [11]. Furthermore, "it tries to make the intra-category information points as associated as feasible even as additionally maintaining the class as distinctive as feasible" [11].
+In our sentiment analysis, K-nearest neighbors gave an accuracy of 45.7\% and 44.3\% before and after PCA, respectively. We used the manhattan distance metric as it is less sensitive to outliers, and we believe our data may have had many outliers and extreme values.
+
+\subsection{Support Vector Machines}
+In Support Vector Machines (SVMs), we want to find a decision boundary, a hyperplane, in a d-dimensional space (in our case, a 34-dimensional space pre-PCA) that maximizes the margin between different classes. We write this mathematically as:
+\begin{align*}
+\min_{{w}, b, \xi} \frac{1}{2} |{w}|^2 + C \sum_{i=1}^n \xi_i
+\end{align*}
+
+subject to:
+\begin{align*}
+y_i({w}^T {x}_i + b) &\geq 1 - \xi_i, \\
+\xi_i &\geq 0,
+\end{align*}
+
+where $x_i$ is the i-th input data point, $y_i \in {-1,1}$ are the output labels, ${w}$ and $b$ are the the weights and the bias term of the decision boundrary hyperplane the two classes, $\xi_i$ is the slack variables that allows a few misclassifications, and $C$ is a hyperparameter.
+
+SVM works well with a large number of features without the risk of running into overfitting. "It works on principle of Structural Risk Minimization" [12]. It enables the process to be done computationally effectively and cheaper than if we manually transform it onto a higher dimension. In addition to the above, SVM is robust to overfitting and versatile to classification and regression problems.
+"SVM continues to be an effective algorithm in high dimensional spaces and is also memory efficient" [13].
+The choice of the Kernel is crucial. For audio features, usually the radial-basis function (rbf) kernel is used, as it transforms the data onto an infinite-dimensional space, allowing the algorithms to capture highly complex nonlinear relationships that may occur in audio features. Moreover, we set C = 3 to increase robustness. This gave us an accuracy of 53.9\% before PCA and 50.1\% after PCA.
+Research states that SVM can be an ineffective algorithm in large data sets and in presence of noise [13]. This could be a plausible reason of having 53.9\% in our case.
+
+\subsection{Naive Bayes}
+In Naive Bayes, the goal is to compute the posterior probability of the output class given the input features:
+
+\begin{equation}
+P(Y|X) = \frac{P(X|Y) \cdot P(Y)}{P(X)}
+\end{equation}
+
+where:
+
+$P(Y|X)$ is the posterior probability of the output class given the input features. \\
+$P(X|Y)$ is the likelihood of observing the input features given the output class. \\
+$P(Y)$ is the prior probability of the output class. \\ 
+$P(X)$ is the evidence, which is the probability of observing the input features. \\
+The Naive Bayes model makes the "naive" assumption that all the input features are independent  of each other, given the output class. This allows us to simplify the likelihood term as follows:
+
+\begin{equation}
+P(X|Y) = \prod_{i=1}^{n} P(x_i|Y)
+\end{equation}
+
+where $x_i$ is the value of the i-th feature in the input vector $X$.
+
+The prior probability $P(Y)$ is estimated from the training data.
+
+The evidence $P(X)$ is a normalizing constant that ensures that the posterior probabilities sum up to 1 over all possible output classes.
+
+To make a prediction, we choose the output class that maximizes the posterior probability:
+
+\begin{equation}
+\hat{Y} = \operatorname*{argmax}_{Y} P(Y|X)
+\end{equation}
+
+where $\hat{Y}$ is the predicted output class.
+
+"This algorithm only requires a small amount of training data to be able to estimate the parameters necessary for classification" [14].
+Naive Bayes tends to perform poorly for audio classification, as the features tend to be highly correlated with each other, violating the ’naive’ assumption of feature independence. Using Naıve Bayes on our data, we were able to get an accuracy of 37.7\%. After applying PCA, accuracy increased to 41.3\%.
+
+
+\subsection{Neural Networks}
+\begin{align*}
+a_i^{l} &= g(z_i^{l}) \\
+z_i^{l} &=w_{i,j}^{l} a_j^{l-1} + b_i^{l} 
+\end{align*}
+for $l$ = 1,2,3, ......, L \\
+where:
+$L$ – is the number of layers \\
+$a_i^{[l]}$ denotes the output of the $i$-th node in the $l$-th layer\\
+$a^{[l]}$ is the vector of outputs of the $l$-th node\\
+$a^{[0]}$ = x is the input layer\\
+$a^{[L]}$ = y is the output layer\\
+$a{[l]}$ is the vectors of the $l$-th node\\
+$w_i^{[l]}$ denoted the weight associated with $i$-th node in the $l$-th layer \\
+$b_i^{[l]}$ is the bias associated with the $i$-th node in the $l$-th layer respectively\\
+$w_{i,j}^{[l]}$ denotes the weight associated with the $j$-th input of the $i$-th node \\
+
+$$
+y_k = \sum_{j=1}^{d_{{h}}^{(L)}} w_{i,j}^{(L)} z_j^{(L)} + b_k^{(L)}
+$$
+
+Neural Networks can be a great tool for audio classification tasks, as the hidden layers can capture nonlinear relationships really well and learn complex and nonlinear patterns in data. Furthermore, their ability to learn from extensive data sets makes them robust and versatile. Lastly, neural networks can automatically extract relevant features from input data, reducing the need for us to implement feature engineering manually. 
+
+For our task, neural networks resulted in an improved accuracy of 48.7\% before PCA and 44.4\% after PCA.
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{NN.png}
+%     \caption{Diagram depiction of Neural Networkz}
+%     \label{fig:NN}
+% \end{figure}
+
+\subsection{Logistic Regression}
+For a binary classification problem, given a dataset $D = {(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)}$, logistic regression learns a hypothesis $h_w(x) = \frac{1}{1 + e^{-w^Tx}}$. This hypothesis function uses sigmoid to find the probability of the input $x$ belonging to class 1.
+The weight vector $w$ is learned by minimizing the cross-entropy loss, given as:
+
+$$
+\min_w \sum_{i=1}^n { y_i \log h_{w}(x_i) + (1-y_i) \log (1-h_{w}(x_i))}  + \frac{\lambda}{2} \|w\|^2
+$$
+
+where $\lambda$ is a regularization parameter preventing overfitting. The term $\frac{\lambda}{2} \|w\|^2$ is the L2 regularization.
+
+To optimize the objective function, we use gradient descent to find weights that minimize loss. Those weights are then used to predict the labels for new/test data by thresholding the predicted probability $h_{w}({x})$ at 0.5, i.e., the predicted label is 1 if $h_{w}({x}) => 0.5$ and 0 otherwise.
+
+Owing to the large number of features in our problem, we also used a logistic regression algorithm. It gave us an accuracy of 46.5\%, which is an improvement compared to some of the algorithms used. However, after using PCA, accuracy reduced to 44.5\%.
+
+\section{Evaluation}
+To evaluate performances of classifiers we have multiple options mentioned below:
+Accuracy: how frequently the classifier is correct?
+Sensitivity: how often does it predict positive when it is actually positive?
+Precison: when it predicts positive, how often is it positive? 
+Specificity: when its actually negative, how often does it predict negative?
+F-1 Score: a measure that assesses recall and precison tradeoff.
+From above mentioned measures, we made use of F1 and accuracy scores to evaluate performances.\\
+
+
+\centering
+\caption{F1 Score and Accuracy Before PCA}
+\begin{tabular}{|c|c|c|}
+    \hline
+    Algorithm & F1 Score & Accuracy \\
+    \hline
+    KNN & 43.3 & 45.7 \\
+    \hline
+    SVM & 53.3 & 53.9 \\
+    \hline
+    Naive Bayes & 34.9 & 37.7 \\
+    \hline
+    Neural Network & 48.2 & 48.7 \\
+    \hline
+    Logestic Regression & 44.3 & 46.5 \\
+    \hline 
+   \end{tabular}
+
+
+
+\section{Conclusion}
+In this project, our objective was to identify the most effective feature extraction technique for audio recordings and compare the performance of different machine learning classifiers based on accuracy metrics. We employed multiple feature extraction methods, including pitch, MFCC, spectral centroid, spectral rolloff, and Chroma. However, our literature review and findings indicated that MFCC was the best feature extraction method for achieving maximum classifier accuracy. This is because MFCC can mimic the way the human auditory system processes sound.
+
+Among the various classifiers employed, Support Vector Machine demonstrated the best performance by yielding the highest accuracy and F1 Scores. Our findings contribute to ongoing research on feature extraction techniques and classifier performance for sentiment analysis. Our research aids in evaluating classifiers and extraction methods for sentiment analysis.
+
+Future research could delve further into the effectiveness of MFCC in accurately capturing the critical features needed for sentiment analysis predictions. Moreover, this research underscores the importance of the feature extraction method in sentiment analysis.  
+
+\begin{thebibliography}{00}
+
+\bibitem{ref1} A. S. Khawaja, S. Vaidyanathan, N.  Natarajan, and R. Ramaswamy, “Deep Learning Identifies Digital Biomarkers for Self – Reported Parkinson’s Disease,” \emph{IEEE Journal of Biomedical and Health and Informatics}
+
+\bibitem{ref2} G. Doddington, M. Przybocki, and A. Martin, “Mel Frequency Spectral Features for Speech Recognition,"\emph{Proceedings of the IEEE International Conference on Acoustics, Speech, and Signal Processing}
+
+\bibitem{ref3} Schuller, B., Batliner, A., & Burkhardt, “The interspeech 2011 computational paralinguistics challenge: Social signals, conflict, emotion, autism”, \emph{Proceedings of the 12th Annual Conference of the International Speech Communication Association}
+
+\bibitem{ref4} R. Dahiya, D. Kumar, and N. Kumar, "A Comparative Study of Feature Extraction Techniques for Speech Recognition System," \emph{Proceedings of the 2014 IEEE International Conference on Advanced Communication, Control and Computing Technologies (ICACCCT)}
+
+\bibitem{ref5} M. Burgos, J. Wilson, J. Gammatone, and J. K. Kim, "Burgos, Wilson, Gammatone and MFCC: A Comparative Study of Audio Feature Extraction Techniques for Emotion Recognition," \emph{Proceedings of the 2014 IEEE Symposium on Computational Intelligence, Cognitive Algorithms, Mind, and Brain (CCMB)}
+
+\bibitem{ref6} M. Labied and A. Belangour, "Automatic Speech Recognition Features Extraction Techniques: A Comparative Study," \emph{International Journal of Advanced Computer Science and Applications (IJACSA)}
+
+\bibitem{ref7} N. Kamarudin, S. A. R. Al-Haddad, iful Jahari Hashim and A. R Hassan, "Feature Extraction Using Spectral Centroid and Mel Frequency Cepstral Coefficient for Quranic Accent Automatic Identification," \emph{Proceedings of the 2013 IEEE International Conference on Control System, Computing and Engineering (ICCSCE)}
+
+\bibitem{ref8} K. Bhangale and M. Kothandaraman, "Speech Emotion Recognition Based on Multiple Acoustic Features and Deep Convolutional Neural Network," \emph{Proceedings of the 2022 IEEE International Conference on Signal Processing, Communication and Computing (ICSPCC)}
+
+\bibitem{ref9} S. D. Reakaa and J. Haritha, “Comparison study on speech emotion prediction using machine learning,” \emph{Journal of Physics}
+
+\bibitem{ref10} J. Chen, Y. A. Huang, Qi Li, and K. K. Paliwal,
+“Recognition of Noisy Speech Using Dynamic Spectral Subband Centroids,” \emph{IEEE SIGNAL PROCESSING LETTERS}, VOL. 11, NO. 2, FEBRUARY 2004
+
+\bibitem{ref11} S D Reakaa and J Haritha “Comparison study on speech emotion prediction using machine learning,” \emph{J. Phys.: Conf. Ser. 1921}
+
+\bibitem{ref12} T. T. Tosida, Erniyati, Krisna, “Sentiment Analysis Using the Support Vector Machine for Community Compliance Representation
+in The Covid-19 Pandemic Period,” \emph{Proceedings of the 11th Annual International Conference on Industrial Engineering and Operations Management Singapore}, March 7-11, 2021 
+
+\bibitem{ref13} Dhiraj K, " Top 4 advantages and disadvantages of Suppor Vector Machine or SVM [Online]. Available:
+https://dhirajkumarblog.medium.com/top-4-advantages-and-disadvantages-of-support-vector-machine-or-svm-a3c06a2b107. Accessed: Apr. 12, 2023
+
+\bibitem{ref14} L. Dey, S. Chakraborty, A. Biswas, B. Bose, S. Tiwari, “Sentiment Analysis of Review Datasets using Naïve Bayes’ and K-NN Classifier”
+
+\bibitem{ref15}	I. Chaturvedi, T. Noel, and R. Satapathy, “Speech emotion recognition using audio matching,” Electronics (Basel), vol. 11, no. 23, p. 3943, 2022.
+
+\bibitem{ref16} Panda, Renato, Malheiro, Ricardo & Paiva, Rui Pedro. (2020). Audio Features for Music Emotion Recognition: A Survey. IEEE Transactions on Affective Computing. PP. 11.10.1109/TAFFC.2020.3032373. 
+
+
+\end{thebibliography}
+
+\end{document}
+
